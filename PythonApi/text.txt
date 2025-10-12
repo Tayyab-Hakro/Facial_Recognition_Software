@@ -1,0 +1,38 @@
+# from flask import Flask, request, jsonify
+# import logging
+
+# app = Flask(__name__)
+# logging.basicConfig(level=logging.INFO)
+
+# @app.route("/log", methods=["POST"])
+# def log():
+#     data = request.get_json(silent=True) or {}
+#     print("Hello world in the python:", data)
+#     app.logger.info("Received logger data: %s", data)
+#     return jsonify({"status": "Ok", "received": data})
+
+# if __name__ == '__main__':
+#     app.run(host="0.0.0.0", port=5000, debug=True)
+
+if name not in recognized_today:
+       with open(attendance_file, "a", newline="") as f:
+           writer = csv.writer(f)
+           writer.writerow([name, datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+       recognized_today.add(name)
+       print(f"🟩 Attendance marked for {name}")
+
+       
+ export async function GetApi() {
+  try {
+    const payload = { msg: "Hello from NodWe.js", ts: new Date().toISOString() };
+    const res = await axios.post('http://127.0.0.1:5000/log', payload, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+    console.log("Response from Flask:", res.data); // use .data
+  } catch (error) {
+    console.error("Error calling Flask:", error.message);
+  }
+}
+
+console.log("Big")
+GetApi()   
