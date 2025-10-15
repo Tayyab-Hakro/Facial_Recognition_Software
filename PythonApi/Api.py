@@ -35,7 +35,7 @@ for person_name in os.listdir(DATASET_FOLDER):
             img = cv2.imread(img_path)
             if img is None:
                 continue
-            resized = cv2.resize(img, (128, 128))
+            resized = cv2.resize(img, (256, 256))
             cv2.imwrite(os.path.join(resized_folder, img_name), resized)
 
 # === Encode known faces ===
