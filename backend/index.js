@@ -20,18 +20,13 @@ if (!fs.existsSync(uploadDir)) {
 
 // ✅ Multer storage setup
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueName = Date.now() + path.extname(file.originalname);
-    cb(null, uniqueName);
-  },
+  destination: (req, file, cb) => cb(null, uploadDir),
+  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
 });
 
 const upload = multer({ storage });
 
-// ✅ Route to forward images to Python
+// ✅ Route to forward images to Python Flask server
 app.post("/addguards", upload.array("images", 3), async (req, res) => {
   try {
     const { name } = req.body;
@@ -49,13 +44,14 @@ app.post("/addguards", upload.array("images", 3), async (req, res) => {
       formData.append("images", fs.createReadStream(file.path));
     });
 
+    // 🔁 Forward images to Flask endpoint
     const response = await axios.post("http://127.0.0.1:5000/save_images", formData, {
       headers: formData.getHeaders(),
     });
 
     res.json({
       success: true,
-      message: "Data sent successfully to Python server",
+      message: "Images forwarded successfully to Python server",
       pythonResponse: response.data,
     });
   } catch (error) {
@@ -69,5 +65,5 @@ app.post("/addguards", upload.array("images", 3), async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Node.js Server running on port ${PORT}`);
+  console.log(`🚀 Node.js Server running on http://127.0.0.1:${PORT}`);
 });
